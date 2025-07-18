@@ -42,7 +42,7 @@ jobs:
         run: terraform validate
 
       - name: Terraform Plan
-        run: terraform plan
+        run: TF_LOG=debug terraform plan
 
       - name: Terraform Apply
         if: github.ref == 'refs/heads/main'
