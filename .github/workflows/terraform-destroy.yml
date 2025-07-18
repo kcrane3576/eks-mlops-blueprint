@@ -11,9 +11,11 @@ jobs:
   destroy:
     if: ${{ github.event.inputs.confirm == 'destroy' }}
     runs-on: ubuntu-latest
+
     permissions:
       id-token: write
       contents: read
+
     defaults:
       run:
         working-directory: terraform/composition/dev
