@@ -15,6 +15,10 @@ jobs:
       run:
         working-directory: terraform/composition/dev
 
+    env:
+      TF_VAR_CIDR_BLOCK: ${{ secrets.TF_VAR_CIDR_BLOCK }}
+      TF_VAR_ENVIRONMENT: ${{ secrets.TF_VAR_ENVIRONMENT }}
+
     steps:
       - name: Checkout code
         uses: actions/checkout@v3
