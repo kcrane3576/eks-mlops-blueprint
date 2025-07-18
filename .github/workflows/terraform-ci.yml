@@ -18,8 +18,8 @@ jobs:
         working-directory: terraform/composition/dev
 
     env:
-      TF_VAR_CIDR_BLOCK: ${{ secrets.TF_VAR_CIDR_BLOCK }}
-      TF_VAR_ENVIRONMENT: ${{ secrets.TF_VAR_ENVIRONMENT }}
+      TF_VAR_cidr_block: ${{ secrets.TF_VAR_CIDR_BLOCK }}
+      TF_VAR_environment: ${{ secrets.TF_VAR_ENVIRONMENT }}
 
     steps:
       - name: Checkout code
@@ -48,7 +48,11 @@ jobs:
         run: terraform validate
 
       - name: Terraform Plan
-        run: TF_LOG=debug terraform plan
+        run: |
+          echo "CIDR_BLOCK: $TF_VAR_cidr_block"
+          echo "ENVIRONMENT: $TF_VAR_environment"
+          TF_LOG=debug terraform plan
+
 
       - name: Terraform Apply
         if: github.ref == 'refs/heads/main'
