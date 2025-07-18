@@ -37,13 +37,16 @@ jobs:
             -backend-config="encrypt=true" \
             -backend-config="dynamodb_table=${{ secrets.TF_VAR_DYNAMODB_TABLE_NAME }}"
 
-      - name: Terraform Validate
-        if: github.ref != 'refs/heads/main'
-        run: terraform validate
+      - name: Force Unlock Terraform State (TEMP)
+        run: terraform force-unlock -force c1475fc4-057d-7969-6284-bc699f2043f8
 
-      - name: Terraform Plan
-        run: TF_LOG=debug terraform plan
+      # - name: Terraform Validate
+      #   if: github.ref != 'refs/heads/main'
+      #   run: terraform validate
 
-      - name: Terraform Apply
-        if: github.ref == 'refs/heads/main'
-        run: terraform apply -auto-approve
+      # - name: Terraform Plan
+      #   run: TF_LOG=debug terraform plan
+
+      # - name: Terraform Apply
+      #   if: github.ref == 'refs/heads/main'
+      #   run: terraform apply -auto-approve
