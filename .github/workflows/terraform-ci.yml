@@ -8,19 +8,15 @@ on:
 jobs:
   terraform:
     runs-on: ubuntu-latest
-
     permissions:
       id-token: write
       contents: read
-
     defaults:
       run:
         working-directory: terraform/composition/dev
-
     env:
       TF_VAR_cidr_block: ${{ secrets.TF_VAR_CIDR_BLOCK }}
       TF_VAR_environment: ${{ secrets.TF_VAR_ENVIRONMENT }}
-
     steps:
       - name: Checkout code
         uses: actions/checkout@v3
@@ -36,7 +32,7 @@ jobs:
 
       - name: Terraform Init
         run: |
-          TF_LOG=debug terraform init \
+          terraform init \
             -backend-config="bucket=${{ secrets.TF_VAR_S3_BUCKET_NAME }}" \
             -backend-config="key=${{ secrets.TF_VAR_S3_BUCKET_KEY }}" \
             -backend-config="region=${{ secrets.TF_VAR_AWS_REGION }}" \
@@ -49,10 +45,7 @@ jobs:
 
       - name: Terraform Plan
         run: |
-          echo "CIDR_BLOCK: $TF_VAR_cidr_block"
-          echo "ENVIRONMENT: $TF_VAR_environment"
-          TF_LOG=debug terraform plan
-
+          terraform plan
 
       - name: Terraform Apply
         if: github.ref == 'refs/heads/main'
