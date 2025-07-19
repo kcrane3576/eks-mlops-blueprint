@@ -45,7 +45,7 @@ jobs:
         run: |
           terraform init \
             -backend-config="bucket=${{ secrets.TF_VAR_S3_BUCKET_NAME }}" \
-            -backend-config="key=networking/${{ secrets.TF_VAR_S3_BUCKET_KEY }}"
+            -backend-config="key=${{ secrets.TF_VAR_S3_BUCKET_KEY }}"
             -backend-config="region=${{ secrets.TF_VAR_REGION }}" \
             -backend-config="encrypt=true" \
             -backend-config="dynamodb_table=${{ secrets.TF_VAR_DYNAMODB_TABLE_NAME }}"
