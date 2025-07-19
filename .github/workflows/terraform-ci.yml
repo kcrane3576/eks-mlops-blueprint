@@ -60,13 +60,6 @@ jobs:
       - name: Run Checkov Scan
         run: checkov -d . --framework terraform -o json --download-external-modules true
 
-      - name: Upload Checkov Report
-        if: always()
-        uses: actions/upload-artifact@v4
-        with:
-          name: checkov-report
-          path: checkov-report.json
-
       - name: Terraform Apply
         if: github.ref == 'refs/heads/main'
         run: terraform apply -auto-approve
