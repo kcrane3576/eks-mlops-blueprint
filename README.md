@@ -27,7 +27,6 @@ S3_ACCESS_SID=
 DYNAMODB_TABLE_NAME=
 DYNAMODB_ACCESS_SID=
 VPC_ACCESS_SID=
-FLOW_LOGS_ACCESS_SID=
 ```
 This file is ignored via `.gitignore`.
 
