@@ -48,7 +48,7 @@ make scan
 ```shell
     git checkout main && \
     git pull origin main && \
-    git checkout -b more-access-extension && \
+    git checkout -b init && \
     git merge main
 ```
 
