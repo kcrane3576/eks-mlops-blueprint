@@ -58,7 +58,7 @@ jobs:
         run: pip install checkov
 
       - name: Run Checkov Scan
-        run: checkov -d . --framework terraform -o json --download-external-modules true > checkov-report.json || true
+        run: checkov -d . --framework terraform -o json --download-external-modules true
 
       - name: Upload Checkov Report
         if: always()
