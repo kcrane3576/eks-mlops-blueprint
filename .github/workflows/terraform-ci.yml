@@ -66,6 +66,7 @@ jobs:
           sudo apt-get update
           sudo apt-get install -y graphviz golang-go
           go install github.com/cycloidio/inframap@latest
+          export PATH=$PATH:$HOME/go/bin
 
       - name: Generate InfraMap Diagram
         run: |
