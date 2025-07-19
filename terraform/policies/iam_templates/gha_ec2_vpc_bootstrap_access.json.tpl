@@ -5,7 +5,7 @@
       "Sid": "$VPC_ACCESS_SID",
       "Effect": "Allow",
       "Action": [
-         "ec2:CreateVpc",
+          "ec2:CreateVpc",
           "ec2:DeleteVpc",
           "ec2:DescribeVpcs",
           "ec2:CreateTags",
