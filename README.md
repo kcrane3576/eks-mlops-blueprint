@@ -28,6 +28,7 @@ DYNAMODB_TABLE_NAME=
 DYNAMODB_ACCESS_SID=
 VPC_ACCESS_SID=
 IAM_ACCESS_SID=
+CLOUDWATCH_LOGS_ACCESS_SID=
 ```
 This file is ignored via `.gitignore`.
 
@@ -47,7 +48,7 @@ make scan
 ```shell
     git checkout main && \
     git pull origin main && \
-    git checkout -b init && \
+    git checkout -b more-access-extension && \
     git merge main
 ```
 
