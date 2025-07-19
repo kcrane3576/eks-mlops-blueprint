@@ -54,12 +54,11 @@ jobs:
       - name: Terraform Plan
         run: terraform plan
 
-      # Add security scan with Checkov
       - name: Install Checkov
         run: pip install checkov
 
       - name: Run Checkov Scan
-        run: checkov -d . --framework terraform_aws -o json > checkov-report.json || true  # Scan current dir
+        run: checkov -d . --framework terraform_aws -o json > checkov-report.json || true
 
       - name: Upload Checkov Report
         if: always()
