@@ -49,7 +49,7 @@ make scan
 ```shell
     git checkout main && \
     git pull origin main && \
-    git checkout -b extend-role-access0 && \
+    git checkout -b init && \
     git merge main
 ```
 
