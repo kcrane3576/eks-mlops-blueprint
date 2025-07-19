@@ -30,7 +30,7 @@ jobs:
         uses: actions/checkout@v3
 
       - name: Configure AWS credentials
-        uses: aws-actions/configure-aws-credentials@v2
+        uses: aws-actions/configure-aws-credentials@v4
         with:
           role-to-assume: ${{ secrets.TF_VAR_ROLE_TO_ASSUME }}
           aws-region: ${{ secrets.TF_VAR_REGION }}
@@ -52,7 +52,7 @@ jobs:
         run: terraform validate
 
       - name: Terraform Plan
-        run: terraform plan
+        run: terraform plan -out=tfplan
 
       - name: Install Checkov
         run: pip install checkov
@@ -60,6 +60,24 @@ jobs:
       - name: Run Checkov Scan
         run: checkov -d . --framework terraform -o json --download-external-modules true || true
 
+      - name: Install Graphviz and InfraMap
+        run: |
+          sudo apt-get update
+          sudo apt-get install -y graphviz golang-go
+          go install github.com/cycloidio/inframap@latest
+
+      - name: Generate InfraMap Diagram
+        run: |
+          terraform show -json tfplan > tfplan.json
+          inframap generate tfplan.json | dot -Tpng -o diagram.png
+
+      - name: Upload Diagram Artifact
+        if: always()
+        uses: actions/upload-artifact@v3
+        with:
+          name: vpc-diagram
+          path: diagram.png
+
       - name: Terraform Apply
         if: github.ref == 'refs/heads/main'
-        run: terraform apply -auto-approve
+        run: terraform apply -auto-approve tfplan
