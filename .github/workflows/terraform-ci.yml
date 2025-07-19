@@ -72,7 +72,6 @@ jobs:
 
       - name: Generate InfraMap Diagram
         run: |
-          terraform show -json tfplan > tfplan.json
           ls -l tfplan.json  # Debug: Confirm tfplan.json exists
           inframap generate tfplan.json > diagram.dot || true  # Generate DOT file
           ls -l diagram.dot  # Debug: Confirm diagram.dot exists
