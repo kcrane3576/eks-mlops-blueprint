@@ -36,6 +36,7 @@
                 "ec2:DescribeAddresses",
                 "ec2:AssociateAddress",
                 "ec2:DisassociateAddress",
+                "ec2:DescribeAddressesAttribute",
                 "ec2:CreateFlowLogs",
                 "ec2:DeleteFlowLogs",
                 "ec2:DescribeFlowLogs",
