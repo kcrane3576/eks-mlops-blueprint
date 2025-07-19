@@ -5,7 +5,7 @@ provider "aws" {
 module "vpc" {
   # checkov:skip=CKV_TF_1:Using ~> 5.0 for MVP flexibility; will pin version in production
   source  = "terraform-aws-modules/vpc/aws"
-  version = "~> 5.0"
+  version = "5.0.0"
 
   name = var.vpc_name
   cidr = var.vpc_cidr
