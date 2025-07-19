@@ -21,7 +21,7 @@
                 "logs:UntagResource",
                 "logs:ListTagsForResource"
             ],
-            "Resource": "arn:aws:logs:$REGION:$AWS_ACCOUNT_ID:log-group:/aws/vpc-flow-log/*:*"
+            "Resource": "arn:aws:logs:$REGION:$AWS_ACCOUNT_ID:log-group:/aws/vpc-flow-log/*"
         }
     ]
 }
