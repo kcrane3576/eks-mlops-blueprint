@@ -31,7 +31,7 @@
                 "arn:aws:ec2:us-east-1:*:vpc/*",
                 "arn:aws:ec2:us-east-1:*:network-acl/*",
                 "arn:aws:ec2:us-east-1:*:subnet/*"
-            ]
+            ],
             "Condition": {
                 "StringEquals": {
                     "aws:ResourceTag/Environment": "$ENVIRONMENT"
