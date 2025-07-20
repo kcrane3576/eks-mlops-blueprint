@@ -47,8 +47,3 @@ variable "cluster_name" {
   type        = string
   description = "EKS cluster name for tags"
 }
-
-variable "environment" {
-  type        = string
-  description = "Environment name (e.g., dev, test, prod) for tagging and IAM scoping"
-}

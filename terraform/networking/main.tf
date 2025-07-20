@@ -26,17 +26,16 @@ module "vpc" {
   flow_log_cloudwatch_log_group_name_prefix = "/aws/vpc-flow-log/"
 
   tags = merge(var.tags, {
-    "kubernetes.io/cluster/${var.cluster_name}" = "shared",
-    Environment = var.environment
+    "kubernetes.io/cluster/${var.cluster_name}" = "shared"
   })
 
-  public_subnet_tags = merge({
+  public_subnet_tags = {
     "kubernetes.io/role/elb" = "1"
-  }, { Environment = var.environment })
+  }
 
-  private_subnet_tags = merge({
+  private_subnet_tags = {
     "kubernetes.io/role/internal-elb" = "1"
-  }, { Environment = var.environment })
+  }
 }
 
 # Custom NACL with Well-Architected best-practice rules (restrictive: deny inbound, allow outbound)
@@ -81,10 +80,7 @@ resource "aws_network_acl" "custom" {
     to_port         = 0
   }
 
-  tags = merge(var.tags, {
-    Name = "${var.vpc_name}-custom-nacl",
-    Environment = var.environment
-  })
+  tags = merge(var.tags, { Name = "${var.vpc_name}-custom-nacl" })
 }
 
 # Associate custom NACL with all private subnets (overrides default)
