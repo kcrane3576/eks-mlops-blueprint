@@ -47,7 +47,9 @@
                     "aws:TagKeys": [
                         "Environment",
                         "Name",
-                        "kubernetes.io/*"
+                        "kubernetes.io/cluster/$CLUSTER_NAME",
+                        "kubernetes.io/role/elb",
+                        "kubernetes.io/role/internal-elb"
                     ]
                 }
             }
