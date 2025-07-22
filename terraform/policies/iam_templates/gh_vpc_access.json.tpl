@@ -43,7 +43,7 @@
                 "StringEquals": {
                     "aws:RequestTag/Environment": "$ENVIRONMENT"
                 },
-                "ForAllValues:StringEquals": {
+                "ForAllValues:StringLike": {
                     "aws:TagKeys": [
                         "Environment",
                         "Name",
