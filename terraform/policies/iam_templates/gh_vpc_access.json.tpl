@@ -31,8 +31,7 @@
                 "ec2:CreateVpc",
                 "ec2:CreateInternetGateway",
                 "ec2:AllocateAddress",
-                "ec2:CreateFlowLogs",
-                "ec2:CreateNatGateway"
+                "ec2:CreateFlowLogs"
             ],
             "Resource": "*",
             "Condition": {
@@ -65,6 +64,14 @@
                     "aws:RequestTag/Environment": "$ENVIRONMENT"
                 }
             }
+        },
+        {
+            "Sid": "$VPC_CREATE_RELAXED_NAT_GATEWAY_SID",
+            "Effect": "Allow",
+            "Action": [
+                "ec2:CreateNatGateway"
+            ],
+            "Resource": "*"
         },
         {
             "Sid": "$VPC_MODIFY_DELETE_SID",
@@ -106,10 +113,10 @@
             }
         },
         {
-            "Sid": "$VPC_ALLOW_REPLACE_NACL_ASSOCIATION",
+            "Sid": "$VPC_REPLACE_NACL_ASSOCIATION_SID",
             "Effect": "Allow",
             "Action": "ec2:ReplaceNetworkAclAssociation",
-            "Resource": "arn:aws:ec2:$REGION:*:network-acl/*",
+            "Resource": "*",
             "Condition": {
                 "StringEqualsIfExists": {
                     "aws:ResourceTag/Environment": "$ENVIRONMENT"
@@ -117,7 +124,13 @@
             }
         },
         {
-            "Sid": "$VPC_ALLOW_SECURITY_GROUP_RULE_CHANGES",
+            "Sid": "$VPC_DISASSOCIATE_ROUTE_TABLE_ALLOW",
+            "Effect": "Allow",
+            "Action": "ec2:DisassociateRouteTable",
+            "Resource": "*"
+        },
+        {
+            "Sid": "$VPC_ALLOW_SECURITY_GROUP_RULE_CHANGE_SID",
             "Effect": "Allow",
             "Action": [
                 "ec2:RevokeSecurityGroupEgress",
@@ -138,7 +151,12 @@
             "Action": "ec2:DeleteTags",
             "Resource": [
                 "arn:aws:ec2:$REGION:*:vpc/*",
-                "arn:aws:ec2:$REGION:*:subnet/*"
+                "arn:aws:ec2:$REGION:*:subnet/*",
+                "arn:aws:ec2:$REGION:*:network-acl/*",
+                "arn:aws:ec2:$REGION:*:route-table/*",
+                "arn:aws:ec2:$REGION:*:internet-gateway/*",
+                "arn:aws:ec2:$REGION:*:security-group/*",
+                "arn:aws:ec2:$REGION:*:natgateway/*"
             ],
             "Condition": {
                 "StringEquals": {
@@ -155,7 +173,12 @@
             "Action": "ec2:CreateTags",
             "Resource": [
                 "arn:aws:ec2:$REGION:*:vpc/*",
-                "arn:aws:ec2:$REGION:*:subnet/*"
+                "arn:aws:ec2:$REGION:*:subnet/*",
+                "arn:aws:ec2:$REGION:*:network-acl/*",
+                "arn:aws:ec2:$REGION:*:route-table/*",
+                "arn:aws:ec2:$REGION:*:internet-gateway/*",
+                "arn:aws:ec2:$REGION:*:security-group/*",
+                "arn:aws:ec2:$REGION:*:natgateway/*"
             ],
             "Condition": {
                 "StringEquals": {
@@ -173,12 +196,37 @@
             }
         },
         {
+            "Sid": "$VPC_CREATE_TAG_EIP_SID",
+            "Effect": "Allow",
+            "Action": "ec2:CreateTags",
+            "Resource": "*",
+            "Condition": {
+                "StringEquals": {
+                    "aws:RequestTag/Environment": "$ENVIRONMENT"
+                },
+                "ForAllValues:StringLike": {
+                    "aws:TagKeys": [
+                        "Environment",
+                        "Name",
+                        "kubernetes.io/cluster/$CLUSTER_NAME",
+                        "kubernetes.io/role/elb",
+                        "kubernetes.io/role/internal-elb"
+                    ]
+                }
+            }
+        },
+        {
             "Sid": "$VPC_DENY_CHANGE_TAG_SID",
             "Effect": "Deny",
             "Action": "ec2:CreateTags",
             "Resource": [
                 "arn:aws:ec2:$REGION:*:vpc/*",
-                "arn:aws:ec2:$REGION:*:subnet/*"
+                "arn:aws:ec2:$REGION:*:subnet/*",
+                "arn:aws:ec2:$REGION:*:network-acl/*",
+                "arn:aws:ec2:$REGION:*:route-table/*",
+                "arn:aws:ec2:$REGION:*:internet-gateway/*",
+                "arn:aws:ec2:$REGION:*:security-group/*",
+                "arn:aws:ec2:$REGION:*:natgateway/*"
             ],
             "Condition": {
                 "StringEquals": {
