@@ -32,10 +32,18 @@ jobs:
       - name: Checkout code
         uses: actions/checkout@v3
 
-      - name: Configure AWS credentials
+      - name: Configure AWS credentials (Read)
+        if: github.ref != 'refs/heads/main'
         uses: aws-actions/configure-aws-credentials@v2
         with:
-          role-to-assume: ${{ secrets.TF_VAR_ROLE_TO_ASSUME }}
+          role-to-assume: ${{ secrets.TF_VAR_READ_ROLE_ARN }}
+          aws-region: ${{ secrets.TF_VAR_REGION }}
+
+      - name: Configure AWS credentials (Write)
+        if: github.ref == 'refs/heads/main'
+        uses: aws-actions/configure-aws-credentials@v2
+        with:
+          role-to-assume: ${{ secrets.TF_VAR_WRITE_ROLE_ARN }}
           aws-region: ${{ secrets.TF_VAR_REGION }}
 
       - name: Setup Terraform
