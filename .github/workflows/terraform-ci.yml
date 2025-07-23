@@ -60,8 +60,13 @@ jobs:
         if: github.ref != 'refs/heads/main'
         run: terraform validate
 
-      - name: Terraform Plan
+      - name: Terraform Plan (with lock on main)
+        if: github.ref == 'refs/heads/main'
         run: terraform plan
+
+      - name: Terraform Plan (no lock on branches/PRs)
+        if: github.ref != 'refs/heads/main'
+        run: terraform plan -lock=false
 
       - name: Install Checkov
         run: pip install checkov
