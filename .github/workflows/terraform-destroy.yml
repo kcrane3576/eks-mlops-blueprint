@@ -12,8 +12,7 @@ jobs:
     if: >
       github.event.inputs.confirm == 'destroy' &&
       github.repository == vars.REPO_CAN_RUN_CI &&
-      github.ref == 'refs/heads/main' &&
-      secrets.TF_VAR_REGION != ''
+      github.ref == 'refs/heads/main'
     runs-on: ubuntu-latest
     permissions:
       id-token: write
