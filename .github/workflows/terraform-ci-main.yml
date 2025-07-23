@@ -6,8 +6,9 @@ on:
 
 jobs:
   terraform:
-    if: github.repository == vars.REPO_CAN_RUN_CI && \
-      github.ref == 'refs/heads/main' && \
+    if: >
+      github.repository == vars.REPO_CAN_RUN_CI &&
+      github.ref == 'refs/heads/main' &&
       secrets.TF_VAR_REGION != ''
     runs-on: ubuntu-latest
     permissions:

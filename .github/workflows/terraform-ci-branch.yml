@@ -5,9 +5,10 @@ on:
 
 jobs:
   terraform:
-    if: github.repository == vars.REPO_CAN_RUN_CI && \
-      github.event_name == 'pull_request' && \
-      github.event.pull_request.base.ref == 'main' && \
+    if: >
+      github.repository == vars.REPO_CAN_RUN_CI &&
+      github.event_name == 'pull_request' &&
+      github.event.pull_request.base.ref == 'main' &&
       secrets.TF_VAR_REGION != ''
     runs-on: ubuntu-latest
     permissions:
