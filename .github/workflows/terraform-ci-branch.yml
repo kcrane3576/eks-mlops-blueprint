@@ -63,11 +63,11 @@ jobs:
         run: |
           (
             set +e  # disable immediate exit on error
-            checkov -d . --framework terraform --download-external-modules true --config-file .checkov.yml -o json > checkov.json
+            checkov -d . --framework terraform --download-external-modules true --config-file ../../../.checkov.yml -o json > checkov.json
             status=$?
             if [ "$status" -ne 0 ]; then
               echo "❌ Checkov failed. Summary:"
-              checkov -d . --framework terraform --download-external-modules true --config-file .checkov.yml -o cli
+              checkov -d . --framework terraform --download-external-modules true --config-file ../../../.checkov.yml -o cli
 
             fi
             exit $status
