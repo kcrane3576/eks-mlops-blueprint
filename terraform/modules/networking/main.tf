@@ -42,6 +42,20 @@ module "vpc" {
   }, { Environment = var.environment })
 }
 
+resource "aws_default_security_group" "restrict_all" {
+  vpc_id = module.vpc.vpc_id
+
+  revoke_rules_on_delete = true
+
+  ingress = []
+  egress  = []
+
+  tags = merge(var.tags, {
+    Name        = "${var.vpc_name}-default-sg-restrict",
+    Environment = var.environment
+  })
+}
+
 # Custom NACL with Well-Architected best-practice rules (restrictive: deny inbound, allow outbound)
 resource "aws_network_acl" "custom" {
   vpc_id = module.vpc.vpc_id # Reference module output
