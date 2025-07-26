@@ -59,4 +59,12 @@ jobs:
         run: pip install checkov
 
       - name: Run Checkov Scan
-        run: checkov -d . --framework terraform --download-external-modules true -o json > checkov.json
+        run: |
+          set -o pipefail
+          checkov -d . --framework terraform --download-external-modules true -o json | tee checkov.json
+          status=${PIPESTATUS[0]}
+          if [ "$status" -ne 0 ]; then
+            echo "Checkov failed. Showing CLI summary for context:"
+            checkov -d . --framework terraform --download-external-modules true -o cli || true
+          fi
+          exit $status
