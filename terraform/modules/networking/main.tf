@@ -2,6 +2,7 @@ provider "aws" {
   region = "us-east-1"
 }
 
+# checkov:skip=CKV_TF_1: Using Terraform Registry version pinning instead of Git commit hash
 # checkov:skip=CKV2_AWS_11: Flow logs are configured via input variables
 # checkov:skip=CKV2_AWS_19: NAT gateway EIPs are not attached to EC2 (expected)
 module "vpc" {
