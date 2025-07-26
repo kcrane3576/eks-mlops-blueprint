@@ -61,10 +61,10 @@ jobs:
       - name: Run Checkov Scan
         run: |
           set -o pipefail
-          checkov -d . --framework terraform --download-external-modules true -o json | tee checkov.json
-          status=${PIPESTATUS[0]}
+          checkov -d . --framework terraform --download-external-modules true -o json > checkov.json
+          status=$?
           if [ "$status" -ne 0 ]; then
-            echo "Checkov failed. Showing CLI summary for context:"
-            checkov -d . --framework terraform --download-external-modules true -o cli || true
+            echo "❌ Checkov failed. Summary:"
+            checkov -d . --framework terraform --download-external-modules true -o cli
           fi
           exit $status
