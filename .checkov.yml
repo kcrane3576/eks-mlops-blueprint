@@ -1,0 +1,5 @@
+skip-check:
+  - CKV_TF_1        # already handled via version pinning
+  - CKV2_AWS_11     # flow logs enabled via input
+  - CKV2_AWS_19     # NAT EIP expected to be unattached
+  - CKV2_AWS_12     # default SG is wiped after VPC creation
