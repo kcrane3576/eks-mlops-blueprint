@@ -66,6 +66,8 @@ CLOUDWATCH_LOGS_LIST=
 CLOUDWATCH_LOGS_CREATE_FLOW_LOG=
 CLOUDWATCH_LOGS_DELETE_FLOW_LOG=
 CLOUDWATCH_LOGS_PASS_ROLE_FOR_FLOW_LOG=
+### Access Analyzer
+ACCESS_ANALYZER_MANAGEMENT=
 ### EKS
 CLUSTER_NAME=
 ```
@@ -87,7 +89,7 @@ make scan
 ```shell
     git checkout main && \
     git pull origin main && \
-    git checkout -b init && \
+    git checkout -b add-access-analyzer-policy && \
     git merge main
 ```
 - Configure a repository Github variable for `REPO_CAN_RUN_CI` to restrict access to who can run your Github actions.
