@@ -89,7 +89,7 @@ make scan
 ```shell
     git checkout main && \
     git pull origin main && \
-    git checkout -b extend-access-analyzer-access && \
+    git checkout -b init && \
     git merge main
 ```
 - Configure a repository Github variable for `REPO_CAN_RUN_CI` to restrict access to who can run your Github actions.
