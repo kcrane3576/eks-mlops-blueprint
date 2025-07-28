@@ -32,6 +32,11 @@ jobs:
       - name: Checkout code
         uses: actions/checkout@v3
 
+      - name: Echo environment
+        run: |
+          echo "REPO_NAME: $TF_VAR_repo_name"
+          echo "ENVIRONMENT: $TF_VAR_environment"
+
       - name: Configure AWS credentials (Read)
         uses: aws-actions/configure-aws-credentials@v2
         with:
