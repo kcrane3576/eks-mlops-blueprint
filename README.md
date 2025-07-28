@@ -89,6 +89,7 @@ make scan
 ---
 
 ## Git Tips
+Branch Setup
 ```shell
     git checkout main && \
     git pull origin main && \
@@ -96,6 +97,15 @@ make scan
     git merge main
 ```
 - Configure a repository Github variable for `REPO_CAN_RUN_CI` to restrict access to who can run your Github actions.
+
+Messaging
+```
+<type>[optional scope]: <description>
+
+[optional body]
+
+[optional footer(s)]
+```
 ---
 
 ## Remote State
