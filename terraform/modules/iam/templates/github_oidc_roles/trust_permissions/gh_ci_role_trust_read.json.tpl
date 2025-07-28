@@ -10,7 +10,9 @@
 			"Condition": {
 				"StringEquals": {
 					"token.actions.githubusercontent.com:aud": "sts.amazonaws.com",
-                    "token.actions.githubusercontent.com:sub": "repo:$REPO_OWNER/$REPO_NAME:environment:$ENVIRONMENT:pull_request"
+					"token.actions.githubusercontent.com:repository": "$REPO_OWNER/$REPO_NAME",
+					"token.actions.githubusercontent.com:environment": "$ENVIRONMENT",
+					"token.actions.githubusercontent.com:sub": "repo:$REPO_OWNER/$REPO_NAME:pull_request"
 				}
 			}
 		}
