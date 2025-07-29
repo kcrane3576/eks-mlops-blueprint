@@ -27,17 +27,17 @@ jobs:
 
       - name: Load environment-specific secrets
         run: |
-          echo "TF_VAR_region=${{ secrets[format('TF_VAR_%s_REGION', env.TF_VAR_environment)] }}" >> $GITHUB_ENV
-          echo "TF_VAR_vpc_name=${{ secrets[format('TF_VAR_%s_VPC_NAME', env.TF_VAR_environment)] }}" >> $GITHUB_ENV
-          echo "TF_VAR_vpc_cidr=${{ secrets[format('TF_VAR_%s_CIDR_BLOCK', env.TF_VAR_environment)] }}" >> $GITHUB_ENV
-          echo "TF_VAR_azs=${{ secrets[format('TF_VAR_%s_AZS', env.TF_VAR_environment)] }}" >> $GITHUB_ENV
-          echo "TF_VAR_private_subnets=${{ secrets[format('TF_VAR_%s_PRIVATE_SUBNETS', env.TF_VAR_environment)] }}" >> $GITHUB_ENV
-          echo "TF_VAR_public_subnets=${{ secrets[format('TF_VAR_%s_PUBLIC_SUBNETS', env.TF_VAR_environment)] }}" >> $GITHUB_ENV
-          echo "TF_VAR_cluster_name=${{ secrets[format('TF_VAR_%s_CLUSTER_NAME', env.TF_VAR_environment)] }}" >> $GITHUB_ENV
-          echo "TF_VAR_s3_bucket_name=${{ secrets[format('TF_VAR_%s_S3_BUCKET_NAME', env.TF_VAR_environment)] }}" >> $GITHUB_ENV
-          echo "TF_VAR_s3_bucket_key=${{ secrets[format('TF_VAR_%s_S3_BUCKET_KEY', env.TF_VAR_environment)] }}" >> $GITHUB_ENV
-          echo "TF_VAR_dynamodb_table_name=${{ secrets[format('TF_VAR_%s_DYNAMODB_TABLE_NAME', env.TF_VAR_environment)] }}" >> $GITHUB_ENV
-          echo "ROLE_TO_ASSUME=${{ secrets[format('TF_VAR_%s_READ_ROLE_ARN', env.TF_VAR_environment)] }}" >> $GITHUB_ENV
+          echo "TF_VAR_region=${{ secrets.TF_VAR_DEV_REGION }}" >> $GITHUB_ENV
+          echo "TF_VAR_vpc_name=${{ secrets.TF_VAR_DEV_VPC_NAME }}" >> $GITHUB_ENV
+          echo "TF_VAR_vpc_cidr=${{ secrets.TF_VAR_DEV_CIDR_BLOCK }}" >> $GITHUB_ENV
+          echo "TF_VAR_azs=${{ secrets.TF_VAR_DEV_AZS }}" >> $GITHUB_ENV
+          echo "TF_VAR_private_subnets=${{ secrets.TF_VAR_DEV_PRIVATE_SUBNETS }}" >> $GITHUB_ENV
+          echo "TF_VAR_public_subnets=${{ secrets.TF_VAR_DEV_PUBLIC_SUBNETS }}" >> $GITHUB_ENV
+          echo "TF_VAR_cluster_name=${{ secrets.TF_VAR_DEV_CLUSTER_NAME }}" >> $GITHUB_ENV
+          echo "TF_VAR_s3_bucket_name=${{ secrets.TF_VAR_DEV_S3_BUCKET_NAME }}" >> $GITHUB_ENV
+          echo "TF_VAR_s3_bucket_key=${{ secrets.TF_VAR_DEV_S3_BUCKET_KEY }}" >> $GITHUB_ENV
+          echo "TF_VAR_dynamodb_table_name=${{ secrets.TF_VAR_DEV_DYNAMODB_TABLE_NAME }}" >> $GITHUB_ENV
+          echo "ROLE_TO_ASSUME=${{ secrets.TF_VAR_DEV_READ_ROLE_ARN }}" >> $GITHUB_ENV
 
       - name: Configure AWS credentials (Read)
         uses: aws-actions/configure-aws-credentials@v2
