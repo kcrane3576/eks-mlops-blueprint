@@ -41,7 +41,7 @@ jobs:
         uses: aws-actions/configure-aws-credentials@v2
         with:
           role-to-assume: $TF_VAR_read_role_arn
-          aws-region: TF_VAR_region
+          aws-region: $TF_VAR_region
 
       - name: Setup Terraform
         uses: hashicorp/setup-terraform@v3
