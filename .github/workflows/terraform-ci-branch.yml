@@ -14,6 +14,7 @@ jobs:
     permissions:
       id-token: write
       contents: read
+
     defaults:
       run:
         working-directory: terraform/envs/dev
@@ -32,10 +33,19 @@ jobs:
       - name: Checkout code
         uses: actions/checkout@v3
 
-      - name: Echo environment
+      - name: Get ID token
+        id: oidc
+        uses: actions/github-script@v7
+        with:
+          script: |
+            const core = require('@actions/core');
+            const token = await core.getIDToken('sts.amazonaws.com');
+            core.setOutput('token', token);
+
+      - name: Show JWT claims
         run: |
-          echo "REPO_NAME: $TF_VAR_repo_name"
-          echo "ENVIRONMENT: $TF_VAR_environment"
+          echo "${{ steps.oidc.outputs.token }}" | awk -F. '{print $2}' | base64 -d 2>/dev/null | jq .
+
 
       - name: Configure AWS credentials (Read)
         uses: aws-actions/configure-aws-credentials@v2
