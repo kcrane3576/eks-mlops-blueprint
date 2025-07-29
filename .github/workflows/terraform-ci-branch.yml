@@ -19,7 +19,13 @@ jobs:
       run:
         working-directory: terraform/envs/dev
     env:
+      TF_VAR_repo_name: ${{ vars.TF_VAR_REPO_NAME }}
+      TF_VAR_environment: ${{ vars.TF_VAR_ENVIRONMENT }}
       TF_VAR_region: ${{ secrets.TF_VAR_REGION }}
+      TF_VAR_s3_bucket_name: ${{ secrets.TF_VAR_S3_BUCKET_NAME }
+      TF_VAR_s3_bucket_key: ${{ secrets.TF_VAR_S3_BUCKET_KEY }}
+      TF_VAR_dynamodb_table_name: ${{ secrets.TF_VAR_DYNAMODB_TABLE_NAME }}
+      TF_VAR_read_role_arn: ${{ secrets.TF_VAR_READ_ROLE_ARN }}
       TF_VAR_vpc_name: ${{ secrets.TF_VAR_VPC_NAME }}
       TF_VAR_vpc_cidr: ${{ secrets.TF_VAR_CIDR_BLOCK }}
       TF_VAR_azs: ${{ secrets.TF_VAR_AZS }}
@@ -27,33 +33,15 @@ jobs:
       TF_VAR_public_subnets: ${{ secrets.TF_VAR_PUBLIC_SUBNETS }}
       TF_VAR_cluster_name: ${{ secrets.TF_VAR_CLUSTER_NAME }}
       TF_VAR_enable_vpc_flow_logs: ${{ secrets.TF_VAR_ENABLE_VPC_FLOW_LOGS }}
-      TF_VAR_repo_name: ${{ vars.TF_VAR_REPO_NAME }}
-      TF_VAR_environment: ${{ vars.TF_VAR_ENVIRONMENT }}
     steps:
       - name: Checkout code
         uses: actions/checkout@v3
 
-      - name: Get ID Token
-        id: oidc
-        uses: actions/github-script@v7
-        with:
-          script: |
-            const token = await core.getIDToken('sts.amazonaws.com');
-            core.setSecret(token); // so it doesn’t show up in logs
-            core.setOutput("token", token);
-
-      - name: Show JWT claims (temporary debug)
-        run: |
-          echo "${{ steps.oidc.outputs.token }}" | \
-            awk -F '.' '{print $2}' | \
-            base64 -d 2>/dev/null | jq .
-
-
       - name: Configure AWS credentials (Read)
         uses: aws-actions/configure-aws-credentials@v2
         with:
-          role-to-assume: ${{ secrets.TF_VAR_READ_ROLE_ARN }}
-          aws-region: ${{ secrets.TF_VAR_REGION }}
+          role-to-assume: $TF_VAR_read_role_arn
+          aws-region: TF_VAR_region
 
       - name: Setup Terraform
         uses: hashicorp/setup-terraform@v3
@@ -61,11 +49,11 @@ jobs:
       - name: Terraform Init
         run: |
           TF_LOG=debug terraform init \
-            -backend-config="bucket=${{ secrets.TF_VAR_S3_BUCKET_NAME }}" \
-            -backend-config="key=${{ vars.TF_VAR_S3_BUCKET_KEY }}" \
-            -backend-config="region=${{ secrets.TF_VAR_REGION }}" \
+            -backend-config="bucket=$TF_VAR_s3_bucket_name" \
+            -backend-config="key=$TF_VAR_s3_bucket_key" \
+            -backend-config="region=$TF_VAR_region" \
             -backend-config="encrypt=true" \
-            -backend-config="dynamodb_table=${{ secrets.TF_VAR_DYNAMODB_TABLE_NAME }}"
+            -backend-config="dynamodb_table=$TF_VAR_dynamodb_table_name"
 
       - name: Terraform Validate
         run: terraform validate
