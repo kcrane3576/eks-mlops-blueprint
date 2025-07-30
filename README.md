@@ -7,7 +7,7 @@ Simple eks / mlops setup
 
 ### 1. Create your `.env` file
 create a `env/.dev.env` file with the following variables:
-- `AWARENESS`: single quotes (') are used in the .env file, but must be removed for secret values in github.
+- `AWARENESS`: single quotes (') are used in the `env/.dev.env` file, but must be removed for secret values in github.
 ```env
 # Github
 REPO_OWNER=
