@@ -96,7 +96,7 @@ Branch Setup
 ```shell
     git checkout main && \
     git pull origin main && \
-    git checkout -b update-env-variables && \
+    git checkout -b init && \
     git merge main
 ```
 - Configure a repository Github variable for `REPO_CAN_RUN_CI` to restrict access to who can run your Github actions.
