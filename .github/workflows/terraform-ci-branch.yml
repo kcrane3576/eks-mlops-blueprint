@@ -40,8 +40,10 @@ jobs:
 
       - name: Debug GitHub OIDC token
         run: |
-          curl -sLS $ACTIONS_ID_TOKEN_REQUEST_URL \
-            -H "Authorization: Bearer $ACTIONS_ID_TOKEN_REQUEST_TOKEN" | jq .
+          TOKEN=$(curl -sLS "$ACTIONS_ID_TOKEN_REQUEST_URL" \
+          -H "Authorization: Bearer $ACTIONS_ID_TOKEN_REQUEST_TOKEN" | jq -r '.value')
+
+          echo "$TOKEN" | cut -d '.' -f2 | base64 -d | jq .
 
       - name: Configure AWS credentials (Read)
         uses: aws-actions/configure-aws-credentials@v2
