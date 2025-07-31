@@ -14,7 +14,7 @@ This project expects sensitive configuration to be stored outside of version con
 - Create a directory named `env/` in the project root
 - Inside it, create a file named `.dev.env`
     - Use the provided `.local.env` file at the root as a reference
-    - Be sure to define a valid `WRITE_ROLE_ARN` in this file before proceeding to `Step 2`
+    - Be sure to define a valid `WRITE_ROLE_ARN` and `READ_ROLE_ARN` in this file before proceeding to `Step 2`
 2. GitHub Repository Variables and Secrets
 - Go to your repository’s Settings → Secrets and Variables → Actions
 - These must be defined at the repository level — not as GitHub Environments — due to OIDC limitations
@@ -74,48 +74,65 @@ Using the generated `.json` files:
 2. Attach
     - Read policies (`read_permissions/*.json`) for non-destructive operations
     - Write policies (`write_permissions/*.json`) for provisioning infrastructure
-3. Define this role ARN as `WRITE_ROLE_ARN` in your `env/.env` file so Terraform in GitHub Actions can assume it.
+3. Define this role ARN as `WRITE_ROLE_ARN` and `READ_ROLE_ARN` in your `env/.env` file so Terraform in GitHub Actions can assume it.
     - ⚠️ This bootstrapped role is required before any Terraform code can run successfully in CI/CD.
 
-### 2. Format code
-```bash
-make format
-```
+## Step 3
+### Connecting CI/CD Workflows to IAM Roles
+After generating and attaching the necessary IAM roles and policies (including trust), your GitHub Actions workflows will automatically assume these roles to provision or validate infrastructure using Terraform.
+Each workflow is configured to:
+- Use OIDC authentication to securely assume an IAM role
+- Load environment-specific variables from GitHub repository secrets and variables
+- Execute Terraform commands (init, validate, plan, apply, or destroy) inside the correct working directory
+- Run pre-deployment security scans (e.g., Checkov) where applicable
 
-### 3. Static analysis
-```bash
+Typical role separation:
+- Read roles are assumed by workflows that validate or scan infrastructure (e.g., pull request CI)
+- Write roles are assumed by workflows that apply or destroy infrastructure (e.g., main branch or manual triggers)
+
+Your workflows are decoupled from local credentials — all access is handled through the IAM roles generated from your `env/.*.env` files and defined in GitHub secrets.
+
+To integrate correctly:
+- Ensure each workflow references the correct role via the `role-to-assume` input (read:pr | write:main)
+- Keep the `WRITE_ROLE_ARN` and `READ_ROLE_ARN` values current in your .env files and GitHub secrets
+- Maintain a clear separation of read and write responsibilities in your IAM policy templates
+
+This model enforces secure, auditable access patterns aligned with GitOps and AWS Well-Architected Framework principles.
+
+### Restricting CI/CD Execution to Authorized Repositories
+To prevent unauthorized repositories (including forks or mirrors) from executing Terraform against your infrastructure, this project uses the `REPO_CAN_RUN_CI` variable to enforce repository-level access control in each workflow.
+
+This condition ensures:
+- Only workflows triggered from the intended, authorized repository are allowed to run
+- Forked PRs and other external events cannot assume IAM roles or provision infrastructure
+- CI/CD pipelines remain secure, auditable, and scoped to trusted sources
+
+This guardrail is a simple but powerful control aligned with secure GitOps principles and least-privilege execution.
+
+
+### Makefile commands
+```shell
+# Render IAM policy JSON from templates (requires env config)
+make generate-policies
+
+# Format Terraform code and enforce style
+make format
+
+# Run static security analysis (e.g., Checkov)
 make scan
 ```
-
 ---
 
-## Git Tips
-Branch Setup
+### Git Tips
+Branch template
 ```shell
     git checkout main && \
     git pull origin main && \
-    git checkout -b init && \
-    git merge main
+    git checkout -b <branch_name> &&
 ```
-- Configure a repository Github variable for `REPO_CAN_RUN_CI` to restrict access to who can run your Github actions.
+Commit messaging
+```shell
+<type>(<scope>): <summary>
 
-Messaging
+[body — what changed and why]
 ```
-<type>(<scope>): <summary line>
-
-<explanation of what changed and why, especially if fixing something broken>
-
-```
----
-
-## Remote State
-
-Terraform uses an S3 backend with DynamoDB state locking. You must configure the values in the `terraform init` step of GitHub Actions based on the `env` values above.
-
----
-
-## GitHub Actions Auth
-
-This repo uses [OIDC](https://docs.aws.amazon.com/IAM/latest/UserGuide/id_roles_providers_create_oidc.html) to securely assume AWS roles without storing AWS credentials in GitHub.
-
----
